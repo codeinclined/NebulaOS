@@ -14,15 +14,19 @@ void kputs(const char* str)
 // Hacky way to print a byte in hex format
 void kputb(const char byte)
 {
-  char buf[5];
-  buf[0] = '0';
-  buf[1] = 'x';
-  buf[2] = 0x30 + (byte >> 4);
-  if (buf[2] >= 0x3A)
-    buf[2] = 0x41 + (buf[2] - 0x3A);
-  buf[3] = 0x30 + (byte & 0x0F);
-  if (buf[3] >= 0x3A)
-    buf[3] = 0x41 + (buf[3] - 0x3A);
-  buf[4] = '\0';
+  char buf[3];
+  buf[0] = 0x30 + ((byte & 0xF0) >> 4);
+  if (buf[0] >= 0x3A)
+    buf[0] = 0x41 + (buf[0] - 0x3A);
+  buf[1] = 0x30 + (byte & 0x0F);
+  if (buf[1] >= 0x3A)
+    buf[1] = 0x41 + (buf[1] - 0x3A);
+  buf[2] = '\0';
   kputs(buf);
+}
+
+void kputba(const char* bytes, size_t len)
+{
+  for (char* by = bytes+len-1; by >= bytes; by--)
+    kputb(*by);
 }

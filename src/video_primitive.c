@@ -1,41 +1,12 @@
+#include "video_primitive.h"
 #include "kmemory.h"
-
-/*
-#define VIDBUFFER_WIDTH 80
-#define VIDBUFFER_HEIGHT 25
-#define VIDBUFFER_MAX 0xB8000 + (VIDBUFFER_HEIGHT * VIDBUFFER_WIDTH * 2)
-#define VIDBUFFER_MIN 0xB8000
-
-unsigned short* cursor = VIDBUFFER_MIN;
-unsigned char cursorX = 0;
-unsigned char cursorY = 0;
-*/
-
-/*
-
-
-void kvpPutChar(unsigned char c, unsigned char fg, unsigned char bg)
-{
-  unsigned short attrib = (bg << 4) | (fg & 0x0F);
-  if (kvpProcessEscape(c))
-  {
-    *cursor = c | (attrib << 8);
-    kvpMoveCursor(cursorX+1, cursorY);
-  }
-}
-*/
 
 #define TEXTBUFFER_ADDR 0xB8000
 unsigned int VidbufWidth = 80;
 unsigned int VidbufHeight = 25;
 const unsigned short* VIDBUF = TEXTBUFFER_ADDR;
 
-struct {
-  unsigned short* ptr;
-  unsigned int x;
-  unsigned int y;
-  unsigned char attr;
-} cursor = {TEXTBUFFER_ADDR, 0, 0, 0x07};
+cursor_t screenCursor = {TEXTBUFFER_ADDR, 0, 0, 0x07};
 
 void kvpScrollScreen(unsigned int lines)
 {
@@ -48,24 +19,24 @@ void kvpScrollScreen(unsigned int lines)
 void kvpClearScreen()
 {
   kmemset(VIDBUF, 0, VidbufHeight * VidbufWidth * sizeof(unsigned short));
-  cursor.x = 0;
-  cursor.y = 0;
+  screenCursor.x = 0;
+  screenCursor.y = 0;
 }
 
 void kvpUpdateCursor()
 {
-  if (cursor.x >= VidbufWidth)
+  if (screenCursor.x >= VidbufWidth)
   {
-    cursor.y += cursor.x / VidbufWidth;
-    cursor.x = cursor.x % VidbufWidth;
+    screenCursor.y += screenCursor.x / VidbufWidth;
+    screenCursor.x = screenCursor.x % VidbufWidth;
   }
-  if (cursor.y >= VidbufHeight)
+  if (screenCursor.y >= VidbufHeight)
   {
-    kvpScrollScreen(1 + cursor.y - VidbufHeight);
-    cursor.y = VidbufHeight - 1;
+    kvpScrollScreen(1 + screenCursor.y - VidbufHeight);
+    screenCursor.y = VidbufHeight - 1;
   }
 
-  cursor.ptr = VIDBUF + cursor.y * VidbufWidth + cursor.x;
+  screenCursor.ptr = VIDBUF + screenCursor.y * VidbufWidth + screenCursor.x;
 }
 
 // Process a character for any single-character escapes and return the result.
@@ -74,10 +45,10 @@ unsigned char kvpProcessEscape(unsigned char c)
   switch (c)
   {
     case '\n':
-      cursor.y++;
+      screenCursor.y++;
       break;
     case '\r':
-      cursor.x = 0;
+      screenCursor.x = 0;
       break;
     default:
       return c;
@@ -90,7 +61,19 @@ void kvpPutChar(unsigned char c)
   kvpUpdateCursor();
   if (kvpProcessEscape(c))
   {
-    *(cursor.ptr) = (unsigned short)c | (unsigned short)(cursor.attr) << 8;
-    cursor.x++;
+    *(screenCursor.ptr) = (unsigned short)c |
+                          (unsigned short)(screenCursor.attr) << 8;
+    screenCursor.x++;
   }
+}
+
+cursor_t kvpCloneScreenCursor()
+{
+  cursor_t clone = screenCursor;
+  return clone;
+}
+
+void kvpSetScreenCursor(cursor_t curs)
+{
+  screenCursor = curs;
 }

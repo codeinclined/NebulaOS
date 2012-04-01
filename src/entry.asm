@@ -2,6 +2,7 @@
 
 global loader
 extern k_main
+extern kputs
 
 MB_MODULEALIGN  equ     1<<0
 MB_MEMINFO      equ     1<<1
@@ -10,7 +11,7 @@ MB_FLAGS        equ     MB_MODULEALIGN | MB_MEMINFO | MB_GRAPHINFO
 MB_MAGIC        equ     0x1BADB002
 MB_CHECKSUM     equ     -(MB_MAGIC + MB_FLAGS)
 
-STACK_SIZE      equ     0x4000 ; 16K
+STACK_SIZE      equ     0x5000 ; 16K
 
 section .text
 
@@ -27,8 +28,13 @@ loader:
     cli ; Disable interupts
     call k_main ; Call the kernel entry point
 .hang:
+    push dword hngstr
+    call kputs
     hlt
     jmp .hang
+
+section .data
+    hngstr db 13,10,10,"!!~~ Reached end of kernel code. Halting CPU ~~!!",0
 
 section .bss
 align 32
