@@ -1,7 +1,7 @@
-C32_OBJECTS=k_main.e32.o
+C32_OBJECTS=k_main.e32.o kmemory.e32.o kstdio.e32.o video_primitive.e32.o
 C32_SRC=$(C32_OBJECTS,.e32.o=.c)
 C32_FLAGS=-m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
-	-nostartfiles -nodefaultlibs -Wall -Wextra -Werror
+	-nostartfiles -nodefaultlibs -std=c99 -Wall -Wextra
 C32_COMMAND=gcc
 
 ASM32_OBJECTS=entry.e32.no
