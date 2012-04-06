@@ -1,9 +1,10 @@
+#include "ktypes.h"
 #include "kernel.h"
 #include "video_primitive.h"
 
-void kputs(const char* str)
+void kputs(const _uint8* str)
 {
-  const char* c = str;
+  const _uint8* c = str;
   while (*c != 0)
   {
     kvpPutChar(*c);
@@ -12,9 +13,9 @@ void kputs(const char* str)
 }
 
 // Hacky way to print a byte in hex format
-void kputb(const char byte)
+void kputb(const _uint8 byte)
 {
-  char buf[3];
+  _uint8 buf[3];
   buf[0] = 0x30 + ((byte & 0xF0) >> 4);
   if (buf[0] >= 0x3A)
     buf[0] = 0x41 + (buf[0] - 0x3A);
@@ -25,8 +26,8 @@ void kputb(const char byte)
   kputs(buf);
 }
 
-void kputba(const char* bytes, size_t len)
+void kputba(const _uint8* bytes, size_t len)
 {
-  for (char* by = bytes+len-1; by >= bytes; by--)
+  for (_uint8* by = bytes+len-1; by >= bytes; by--)
     kputb(*by);
 }
