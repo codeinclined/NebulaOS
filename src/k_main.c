@@ -7,20 +7,7 @@ extern cursor_t screenCursor;
 
 void k_main(void* MB_INFO, _uint32 MB_MAGIC)
 { 
-//  kmemsetv((_uint32*)0xB8000, (_uint16*) 0xFF0A, 2, 5);
-    kputba(0, 1);
-    kputs("\r\n");
-    kputba(1, 1);
-    kputs("\r\n");
-
-    kputba(2, 1);
-    kputs("\r\n");
-
-    kputba(3, 1);
-    kputs("\r\n");
-    //kvpScrollScreen(1);
-/*  
-  kputs("\r\nScanning multiboot information...");
+  kvpClearScreen(0x00);
 
   if (MB_MAGIC != 0x2BADB002)
   {
@@ -28,7 +15,7 @@ void k_main(void* MB_INFO, _uint32 MB_MAGIC)
     kputs("Multiboot information missing! Kernel halting..");
     kputs("\r\n-->           0x");
     kputba(&MB_MAGIC, sizeof(_uint32));
-    kputs("\r\n--> Expected: 0x2BADB002");
+    kputs("\r\n--> Expected: 0x2BADB002\r\n");
     return;
   }
   else
@@ -37,7 +24,14 @@ void k_main(void* MB_INFO, _uint32 MB_MAGIC)
     kputs("done");
     kputs("\r\n-->  0x");
     kputba(&MB_MAGIC, sizeof(_uint32));
+    kputs("\r\n");
   }
-*/
+
+  for (_byte i=0; i < 30; i++)
+  {
+    kputb(i);
+    kputs("\r\n");
+  }
+
   return;
 }

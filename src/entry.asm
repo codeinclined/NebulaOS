@@ -6,8 +6,7 @@ extern kputs
 
 MB_MODULEALIGN  equ     1<<0
 MB_MEMINFO      equ     1<<1
-MB_GRAPHINFO    equ     1<<2
-MB_FLAGS        equ     MB_MODULEALIGN | MB_MEMINFO | MB_GRAPHINFO
+MB_FLAGS        equ     MB_MODULEALIGN | MB_MEMINFO
 MB_MAGIC        equ     0x1BADB002
 MB_CHECKSUM     equ     -(MB_MAGIC + MB_FLAGS)
 

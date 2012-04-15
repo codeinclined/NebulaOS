@@ -12,7 +12,7 @@ cursor_t screenCursor = {TEXTBUFFER_ADDR, 0, 0, 0x07};
 
 void kvpScrollScreen(_uint16 lines)
 {
-  kmemcpy(VIDBUF + VidbufWidth, VIDBUF + VidbufWidth*lines,
+  kmemcpy(VIDBUF + VidbufWidth, VIDBUF + VidbufWidth + VidbufWidth*lines,
     sizeof(unsigned short) * (VidbufWidth*(VidbufHeight-2)));
   kmemset(VIDBUF + VidbufWidth * (VidbufHeight-1), 0, VidbufHeight);
 }
@@ -23,7 +23,7 @@ void kvpClearScreen(_uint8 attr)
   screenCursor.x = 0;
   screenCursor.y = 0;
   screenCursor.attr = 0x4F;
-  kputs("    NebulaOS pre0.0                                                             ");
+  kputs("   NebulaOS                                                            kern_out ");
   screenCursor.attr = 0x07;  
   screenCursor.x = 0;
   screenCursor.y = 1;
@@ -49,12 +49,12 @@ void kvpUpdateCursor()
   screenCursor.ptr = VIDBUF + screenCursor.y * VidbufWidth + screenCursor.x;
   
   // Update hardware cursor position
-  hwcursl = (_uint8)((screenCursor.ptr - VIDBUF) & (0x00FF));
+/*  hwcursl = (_uint8)((screenCursor.ptr - VIDBUF) & (0x00FF));
   hwcursh = (_uint8)(((screenCursor.ptr - VIDBUF) & (0xFF00)) >> 8);
   outp(0x03D4, 0x0F);
   outp(0x03D5, hwcursl);
   outp(0x03D4, 0x0E);
-  outp(0x03D5, hwcursh);
+  outp(0x03D5, hwcursh); */
 }
 
 // Process a character for any single-character escapes and return the result.
@@ -78,8 +78,7 @@ void kvpPutChar(_uint8 c)
 {
   if (kvpProcessEscape(c))
   {
-    *(screenCursor.ptr) = (_uint16) c |
-                          (_uint16) (screenCursor.attr) << 8;
+    *(screenCursor.ptr) = (_uint16) c | (_uint16) (screenCursor.attr) << 8;
     screenCursor.x++;
   }
   kvpUpdateCursor();
