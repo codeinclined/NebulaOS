@@ -49,12 +49,12 @@ void kvpUpdateCursor()
   screenCursor.ptr = VIDBUF + screenCursor.y * VidbufWidth + screenCursor.x;
   
   // Update hardware cursor position
-/*  hwcursl = (_uint8)((screenCursor.ptr - VIDBUF) & (0x00FF));
+  hwcursl = (_uint8)((screenCursor.ptr - VIDBUF) & (0x00FF));
   hwcursh = (_uint8)(((screenCursor.ptr - VIDBUF) & (0xFF00)) >> 8);
   outp(0x03D4, 0x0F);
   outp(0x03D5, hwcursl);
   outp(0x03D4, 0x0E);
-  outp(0x03D5, hwcursh); */
+  outp(0x03D5, hwcursh);
 }
 
 // Process a character for any single-character escapes and return the result.

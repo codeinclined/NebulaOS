@@ -1,0 +1,47 @@
+/******************************************************************************
+  Copyright (c) 2012 Joshua William Taylor <taylor.joshua88@gmail.com>
+
+  This software is provided 'as-is', without any express or implied
+  warranty. In no event will the authors be held liable for any damages
+  arising from the use of this software.
+
+  Permission is granted to anyone to use this software for any purpose,
+  including commercial applications, and to alter it and redistribute it
+  freely, subject to the following restrictions:
+
+  1. The origin of this software must not be misrepresented; you must not
+    claim that you wrote the original software. If you use this software
+    in a product, an acknowledgment in the product documentation would be
+    appreciated but is not required.
+  2. Altered source versions must be plainly marked as such, and must not be
+    misrepresented as being the original software.
+  3. This notice may not be removed or altered from any source distribution.
+******************************************************************************/
+
+  NebulaOS is a toy project for learning low-level programming on the x86_64
+platform, as well as try out some concepts which aren't what has been accepted
+as the standard approaches to OS design. NebulaOS's code is licensed under the
+zlib license.
+
+  Current development of this project is focused on the kernel: COG (Center of
+Gravity). COG takes a pragmatic microkernel approach; if something is too great
+of a performance cost to be contained in a microkernel-style service, including
+it into the kernel via a module is not off-the-table.
+
+  This file will remain a living document, keeping the user informed of the
+current status and future plans of NebulaOS. In case you obtained this software
+outside of GitHub, the project's git repository is hosted at:
+https://github.com/arcamugapy/NebulaOS
+
+  While development is focused on COG all commits will be done on the master
+branch. When COG is developed to the point in which services can be developed
+independently of kernel code, it will be placed into the cog branch, and
+services will gain their own branches. At this point there will be periodic
+merges into master at certain milestones. More repository management info
+will be decided as the project continues, and this document will then be
+updated.
+
+  Feel free to e-mail me at any time about anything you find interesting
+or have questions about in the design or code of this project. I hope one day
+this project will be mature enough to not only be interesting for my own
+purposes.
