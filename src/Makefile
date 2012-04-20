@@ -1,3 +1,43 @@
+###############################################################################
+#       Makefile
+###############################################################################
+#  Hand-written makefile for compiling the NebulaOS kernel. Don't consider
+#  this file to be permanent; I may switch to another system in the future.
+###############################################################################
+#  DEPENDS:
+#  make (This makefile was tested using GNU Make 3.82)
+#  nasm
+#  gcc capable of cross-compiling (LLVM may be supported in the future)
+#  binutils
+#  updatekernel.sh (part of the NebulaOS source tree)
+###############################################################################
+#  Author:  Joshua William Taylor <taylor.joshua88@gmail.com>
+#  Project: NebulaOS
+#  Created: 19APR2012
+#  License: zlib License
+###############################################################################
+#  Copyright (c) 2012 Joshua William Taylor <taylor.joshua88@gmail.com>
+#
+#    This software is provided 'as-is', without any express or implied
+#    warranty. In no event will the authors be held liable for any damages
+#    arising from the use of this software.
+#
+#    Permission is granted to anyone to use this software for any purpose,
+#    including commercial applications, and to alter it and redistribute it
+#    freely, subject to the following restrictions:
+#
+#    1. The origin of this software must not be misrepresented; you must not
+#    claim that you wrote the original software. If you use this software
+#    in a product, an acknowledgment in the product documentation would be
+#    appreciated but is not required.
+#
+#    2. Altered source versions must be plainly marked as such, and must not be
+#    misrepresented as being the original software.
+#
+#    3. This notice may not be removed or altered from any source
+#    distribution.
+###############################################################################
+
 C32_OBJECTS=k_main.e32.o kmemory.e32.o kstdio.e32.o video_primitive.e32.o
 C32_SRC=$(C32_OBJECTS,.e32.o=.c)
 C32_FLAGS=-m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
@@ -30,11 +70,5 @@ link:
 
 rebuild: clean all
 
-update:
-	sudo modprobe nbd max_part=16
-	-sudo qemu-nbd -c /dev/nbd0 ~/VirtualBox\ VMs/NebulaOS/NebulaOS.vdi
-	-sudo mount /dev/nbd0p1 ~/Code/NASM/NebulaOS/loopmount
-	sudo cp ./nebula.krn ~/Code/NASM/NebulaOS/loopmount/boot
-	-sudo umount ~/Code/NASM/NebulaOS/loopmount
-	sudo qemu-nbd -d /dev/nbd0
-
+update: all
+	./updatekernel.sh
